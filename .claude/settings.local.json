@@ -3,7 +3,13 @@
     "allow": [
       "Bash(npx create-next-app:*)",
       "Bash(npx --yes create-next-app@latest landing-page --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\")",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(npm install)",
+      "Bash(yarn --version)",
+      "Bash(sudo chown:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npm run dev:*)",
+      "Read(//var/folders/d_/cpp12ntx69lb5h5wsd2l5cn80000gn/T/TemporaryItems/NSIRD_screencaptureui_HpNQa0/**)"
     ],
     "deny": [],
     "ask": []
