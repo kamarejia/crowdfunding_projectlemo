@@ -17,18 +17,25 @@ export default function HeroSection() {
         <div className="h-[59px] bg-lemo-dark-secondary/70 backdrop-blur-[0.5px]" />
 
         {/* ヘッダーロゴ */}
-        <div className="absolute top-[26px] left-[18px] z-20 flex items-center gap-3">
-          <Image
-            src="/assets/logos/spacian_logo_square.svg"
-            alt="Spacianロゴ"
-            width={27}
-            height={27}
-            className="object-contain"
-            priority
-          />
-          <span className="font-orbitron font-medium text-lemo-primary text-[18px] leading-none">
-            Spacian
-          </span>
+        <div className="absolute top-[26px] left-[18px] z-20">
+          <a
+            href="https://spacian.jp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
+          >
+            <Image
+              src="/assets/logos/spacian_logo_square.svg"
+              alt="Spacianロゴ"
+              width={27}
+              height={27}
+              className="object-contain"
+              priority
+            />
+            <span className="font-orbitron font-medium text-lemo-primary text-[18px] leading-none">
+              Spacian
+            </span>
+          </a>
         </div>
 
         {/* キービジュアル */}
@@ -38,7 +45,7 @@ export default function HeroSection() {
             src="/assets/images/キービジュアル切り抜き.png"
             alt="Project LEMO キービジュアル"
             fill
-            className="object-cover object-[40%_center]"
+            className="object-cover object-[20%_center]"
             priority
           />
         </div>

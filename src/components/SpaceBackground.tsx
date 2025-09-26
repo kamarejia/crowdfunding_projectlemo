@@ -26,28 +26,39 @@ const generateStarPositions = (count: number, seed: number) => {
   return positions;
 };
 
-const normalStars = generateStarPositions(35, 1);
+const normalStars = generateStarPositions(50, 1);
 const topRightStars = generateStarPositions(25, 100).map(star => ({
   ...star,
   left: Math.round((60 + star.left * 0.35) * 100) / 100,
   top: Math.round((star.top * 0.4) * 100) / 100,
 }));
+const bottomStars = generateStarPositions(20, 700).map(star => ({
+  ...star,
+  top: Math.round((70 + star.top * 0.3) * 100) / 100,
+}));
 
-const pinkStars = generateStarPositions(8, 200);
+const pinkStars = generateStarPositions(12, 200);
 const pinkTopRightStars = generateStarPositions(6, 300).map(star => ({
   ...star,
   left: Math.round((65 + star.left * 0.3) * 100) / 100,
   top: Math.round((star.top * 0.35) * 100) / 100,
 }));
+const pinkBottomStars = generateStarPositions(4, 800).map(star => ({
+  ...star,
+  top: Math.round((75 + star.top * 0.25) * 100) / 100,
+}));
 
-const blueStars = generateStarPositions(12, 400);
+const blueStars = generateStarPositions(15, 400);
 const blueTopRightStars = generateStarPositions(8, 500).map(star => ({
   ...star,
   left: Math.round((70 + star.left * 0.25) * 100) / 100,
   top: Math.round((star.top * 0.3) * 100) / 100,
 }));
+const blueBottomStars = generateStarPositions(6, 900).map(star => ({
+  ...star,
+  top: Math.round((80 + star.top * 0.2) * 100) / 100,
+}));
 
-const meteors = generateStarPositions(3, 600);
 
 export default function SpaceBackground() {
   return (
@@ -77,6 +88,22 @@ export default function SpaceBackground() {
         {topRightStars.map((star, i) => (
           <div
             key={`top-right-${i}`}
+            className="absolute w-[4px] h-[4px] bg-white rounded-full animate-pulse"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              animationDelay: `${star.delay}s`,
+              animationDuration: `${star.duration}s`,
+              opacity: star.opacity,
+              boxShadow: '0 0 12px rgba(255,255,255,1), 0 0 24px rgba(255,255,255,0.5)',
+            }}
+          />
+        ))}
+
+        {/* 下部の星 */}
+        {bottomStars.map((star, i) => (
+          <div
+            key={`bottom-${i}`}
             className="absolute w-[4px] h-[4px] bg-white rounded-full animate-pulse"
             style={{
               left: `${star.left}%`,
@@ -122,6 +149,22 @@ export default function SpaceBackground() {
             }}
           />
         ))}
+
+        {/* 下部のピンクの星 */}
+        {pinkBottomStars.map((star, i) => (
+          <div
+            key={`big-bottom-${i}`}
+            className="absolute w-[6px] h-[6px] bg-[#FF23D0] rounded-full animate-pulse"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              animationDelay: `${star.delay + 1}s`,
+              animationDuration: `${star.duration + 0.5}s`,
+              opacity: 0.9 + (star.opacity - 0.8) * 0.5,
+              boxShadow: '0 0 20px #FF23D0, 0 0 40px rgba(255,35,208,0.6)',
+            }}
+          />
+        ))}
       </div>
 
       {/* 青い星 - キービジュアル中心の中速回転（ゆっくり） */}
@@ -156,25 +199,24 @@ export default function SpaceBackground() {
             }}
           />
         ))}
-      </div>
 
-      {/* 流れ星エフェクト */}
-      <div className="absolute inset-0">
-        {meteors.map((meteor, i) => (
+        {/* 下部の青い星 */}
+        {blueBottomStars.map((star, i) => (
           <div
-            key={`meteor-${i}`}
-            className="absolute w-[2px] h-[40px] bg-gradient-to-t from-transparent to-white opacity-80 animate-pulse"
+            key={`blue-bottom-${i}`}
+            className="absolute w-[3px] h-[3px] bg-cyan-300 rounded-full animate-pulse"
             style={{
-              left: `${meteor.left}%`,
-              top: `${meteor.top * 0.8}%`,
-              animationDelay: `${meteor.delay + 3}s`,
-              animationDuration: `${meteor.duration + 2}s`,
-              transform: `rotate(${meteor.opacity * 45 - 22.5}deg)`,
-              boxShadow: '0 0 8px rgba(255,255,255,0.8)',
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              animationDelay: `${star.delay + 2}s`,
+              animationDuration: `${star.duration + 1}s`,
+              opacity: 0.7 + star.opacity * 0.3,
+              boxShadow: '0 0 15px rgba(103,232,249,0.8), 0 0 30px rgba(103,232,249,0.4)',
             }}
           />
         ))}
       </div>
+
 
       {/* 控えめな深宇宙エフェクト */}
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-white/[0.01] to-transparent opacity-30" />
