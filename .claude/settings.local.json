@@ -1,4 +1,4 @@
-{
+1{
   "permissions": {
     "allow": [
       "Bash(npx create-next-app:*)",

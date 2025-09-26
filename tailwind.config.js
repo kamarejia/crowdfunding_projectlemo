@@ -10,6 +10,23 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        lemo: {
+          primary: '#ff23d0',
+          secondary: '#e4027e',
+          dark: '#13161b',
+          'dark-secondary': '#151515',
+        }
+      },
+      fontFamily: {
+        orbitron: ['var(--font-orbitron)', 'monospace'],
+        'mplus1': ['var(--font-m-plus-1)', 'sans-serif'],
+      },
+      maxWidth: {
+        'mobile': '393px',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },

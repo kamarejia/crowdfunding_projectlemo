@@ -1,12 +1,21 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Orbitron, M_PLUS_1 } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  variable: '--font-orbitron'
+})
+const mPlus1 = M_PLUS_1({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700', '800', '900'],
+  variable: '--font-m-plus-1'
+})
 
 export const metadata: Metadata = {
-  title: 'プロジェクト準備中 | Coming Soon',
-  description: '新しいプロジェクトを準備中です。お楽しみに！',
+  title: 'Project LEMO | プロジェクトレモ - クラウドファンディング',
+  description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリのクラウドファンディングプロジェクト',
 }
 
 export default function RootLayout({
@@ -16,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${orbitron.variable} ${mPlus1.variable}`}>{children}</body>
     </html>
   )
 }
