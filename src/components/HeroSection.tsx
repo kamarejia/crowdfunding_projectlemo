@@ -24,6 +24,7 @@ export default function HeroSection() {
             width={27}
             height={27}
             className="object-contain"
+            priority
           />
           <span className="font-orbitron font-medium text-lemo-primary text-[18px] leading-none">
             Spacian

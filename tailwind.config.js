@@ -22,7 +22,7 @@ module.exports = {
         'mplus1': ['var(--font-m-plus-1)', 'sans-serif'],
       },
       maxWidth: {
-        'mobile': '393px',
+        'mobile': '768px',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
