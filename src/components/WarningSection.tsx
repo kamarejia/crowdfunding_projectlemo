@@ -93,7 +93,7 @@ export default function WarningSection() {
 
         <div className="absolute top-[215px] left-[19px]">
           <div className="bg-[#e4027e] px-3 py-1 text-white text-[13px] font-mplus1 rounded">
-            やたらと"モ"という
+            やたらと&quot;モ&quot;という
           </div>
           <div className="text-[#e4027e] text-[10px] font-mplus1 mt-2 max-w-[120px]">
             <p>口はあまり動いていないが</p>
