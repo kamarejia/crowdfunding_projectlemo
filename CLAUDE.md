@@ -18,6 +18,9 @@ npm run start
 npm run lint
 ```
 
+### テスト実行
+このプロジェクトには現在テストフレームワークが設定されていません。テストが必要な場合は、Jest + React Testing Libraryの導入を検討してください。
+
 ## プロジェクト概要
 
 このプロジェクトは**Next.js 14**を使用した日本語対応のランディングページです。App Router（src/app）を採用し、TypeScript + Tailwind CSSで構築されています。現在は「準備中（Coming Soon）」ページとして機能しています。
@@ -37,7 +40,16 @@ src/
 ├── app/
 │   ├── globals.css      # Tailwindとカスタムスタイル
 │   ├── layout.tsx       # ルートレイアウト（日本語設定）
-│   └── page.tsx         # メインページ（準備中表示）
+│   └── page.tsx         # メインページ（HeroSection + WarningSection）
+├── components/
+│   ├── HeroSection.tsx     # ヒーローセクション（キービジュアル・プロジェクト情報）
+│   ├── WarningSection.tsx  # 警告セクション（レモ星人特徴紹介）
+│   ├── SpaceBackground.tsx # 宇宙背景コンポーネント
+│   └── TestSpace.tsx       # テスト用コンポーネント
+├── lib/
+│   └── constants.ts     # プロジェクト定数（色、テキスト、設定）
+└── types/
+    └── index.ts         # TypeScript型定義
 ```
 
 ## 重要な設定
@@ -68,6 +80,20 @@ src/
 - 警告色: `#e4027e`
 - 詳細は `src/lib/constants.ts` を参照
 
+## コンポーネント設計原則
+
+- **コンポーネント分離**: HeroSection、WarningSection等、機能別に分離
+- **定数管理**: `src/lib/constants.ts` で色、テキスト、設定を一元管理
+- **型安全性**: `src/types/index.ts` でプロジェクト固有の型を定義
+- **Next.js Image**: 画像最適化のため Next.js Image コンポーネントを使用
+
+## フォントとタイポグラフィ
+
+- **Orbitron**: 英語見出し、SF感演出
+- **DotGothic16**: 日本語ゲーム風テキスト（警告セクション）
+- **M PLUS 1**: 日本語本文、UI
+- **Lora**: ロゴ、アクセント
+
 ## 開発時の注意点
 
 - 新機能追加時は既存の日本語対応を維持してください
@@ -75,3 +101,4 @@ src/
 - TypeScriptの型安全性を保持してください
 - デザインは `デザイン設計.md` を参照してください
 - 型定義は `src/types/index.ts` を使用してください
+- 画像アセットは `public/assets/` 配下に配置し、Next.js Imageを使用してください
