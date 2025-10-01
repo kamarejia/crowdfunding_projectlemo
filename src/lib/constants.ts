@@ -9,9 +9,27 @@ export const PROJECT_INFO = {
 
 export const CROWDFUNDING_INFO = {
   startDate: '2025/10/23~',
+  startDateForCalculation: '2025-10-23', // 日数計算用
   platform: 'Campfire',
   ctaText: 'クラウドファンディングスタート'
 } as const
+
+/**
+ * クラウドファンディング開始までの残り日数を計算
+ * @returns 残り日数（開始日当日は0、過去の場合は負の値）
+ */
+export function getDaysUntilCrowdfunding(): number {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // 時刻をリセット
+
+  const startDate = new Date(CROWDFUNDING_INFO.startDateForCalculation)
+  startDate.setHours(0, 0, 0, 0)
+
+  const diffTime = startDate.getTime() - today.getTime()
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+  return diffDays
+}
 
 export const COLORS = {
   primary: '#ff23d0',

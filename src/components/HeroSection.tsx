@@ -1,17 +1,19 @@
 'use client'
 
 import Image from 'next/image'
-import { PROJECT_INFO, CROWDFUNDING_INFO } from '@/lib/constants'
-import SpaceBackground from './SpaceBackground'
+import { useState, useEffect } from 'react'
+import { PROJECT_INFO, CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
 
 export default function HeroSection() {
+  const [daysUntil, setDaysUntil] = useState<number | null>(null)
+
+  useEffect(() => {
+    setDaysUntil(getDaysUntilCrowdfunding())
+  }, [])
   return (
     <section className="relative min-h-screen overflow-hidden">
-      {/* 宇宙背景シェーダー */}
-      <SpaceBackground />
-
-      {/* メインコンテンツコンテナ (スマホ中心、PC中央配置) - 背景透明化 */}
-      <div className="relative max-w-mobile mx-auto min-h-screen flex flex-col md:shadow-[0_0_0_50vw_#13161b]">
+      {/* メインコンテンツコンテナ (スマホ中心、PC中央配置) */}
+      <div className="relative max-w-mobile mx-auto min-h-screen flex flex-col">
 
         {/* セーフエリア - 半透明化 */}
         <div className="h-[59px] bg-lemo-dark-secondary/70 backdrop-blur-[0.5px]" />
@@ -83,7 +85,11 @@ export default function HeroSection() {
             <button className="relative w-full max-w-[312px] h-[62px] bg-[#FF23D0] text-white text-[20px] font-orbitron font-normal hover:bg-lemo-secondary transition-all duration-300 flex items-center justify-center leading-[34px] border-2 border-[#FF23D0] hover:border-white group overflow-hidden">
               {/* 光るエフェクト */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <span className="relative z-10">{CROWDFUNDING_INFO.ctaText}</span>
+              <span className="relative z-10">
+                {daysUntil !== null && daysUntil > 0
+                  ? `クラファンまで${daysUntil}日`
+                  : CROWDFUNDING_INFO.ctaText}
+              </span>
             </button>
           </div>
         </div>

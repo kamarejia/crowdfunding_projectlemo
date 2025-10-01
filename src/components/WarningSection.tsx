@@ -16,9 +16,9 @@ export default function WarningSection() {
   }, [])
 
   return (
-    <section className="relative w-full h-[560px] bg-[#13161b] overflow-hidden">
+    <section className="relative w-full h-[560px] overflow-hidden">
       {/* メインコンテンツコンテナ - レスポンシブ */}
-      <div className="relative max-w-mobile mx-auto h-full md:shadow-[0_0_0_50vw_#13161b]">
+      <div className="relative max-w-mobile mx-auto h-full">
       {/* トップの警告アニメーション */}
       <div className="absolute top-0 left-0 w-full h-[46px] overflow-hidden">
         {/* 警告画像のループアニメーション - 複数枚を連結 */}
@@ -36,13 +36,25 @@ export default function WarningSection() {
         </div>
 
         {/* WARNING テキスト */}
-        <div className="absolute top-[8px] left-1/2 transform -translate-x-1/2 bg-[#121b26] px-6 py-1 rounded">
-          <div className="flex items-center gap-2">
-            <div className="w-[29px] h-[29px] bg-[#e4027e] rounded-full animate-pulse"></div>
+        <div className="absolute top-[8px] left-1/2 transform -translate-x-1/2 bg-[#121b26] px-6 py-2 rounded flex items-center justify-center">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/assets/icons/warning_icon.png"
+              alt="Warning Icon"
+              width={40}
+              height={40}
+              className="animate-pulse"
+            />
             <span className="font-orbitron font-bold text-[#e4027e] text-[25px] tracking-wider animate-pulse">
               WARNING
             </span>
-            <div className="w-[29px] h-[29px] bg-[#e4027e] rounded-full animate-pulse"></div>
+            <Image
+              src="/assets/icons/warning_icon.png"
+              alt="Warning Icon"
+              width={40}
+              height={40}
+              className="animate-pulse"
+            />
           </div>
         </div>
       </div>
@@ -61,6 +73,7 @@ export default function WarningSection() {
             alt="レモ星人"
             fill
             className="object-contain"
+            sizes="210px"
             priority
           />
         </div>
@@ -138,8 +151,8 @@ export default function WarningSection() {
         </div>
 
         {/* ALIENS HAVE ARRIVED テキスト */}
-        <div className="absolute top-[8px] left-1/2 transform -translate-x-1/2 bg-[#121b26] px-6 py-1 rounded">
-          <span className="font-orbitron font-bold text-[#e4027e] text-[18px] tracking-wider animate-pulse">
+        <div className="absolute top-[8px] left-1/2 transform -translate-x-1/2 bg-[#121b26] px-4 py-2 rounded flex items-center justify-center">
+          <span className="font-orbitron font-bold text-[#e4027e] text-[15px] tracking-wider animate-pulse whitespace-nowrap">
             ALIENS HAVE ARRIVED
           </span>
         </div>
