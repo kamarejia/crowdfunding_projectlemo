@@ -6,7 +6,6 @@ import SpaceSectionWrapper from './SpaceSectionWrapper'
 
 export default function MangaSection() {
   const [visibleFrames, setVisibleFrames] = useState<number[]>([])
-  const [showDebugLine, setShowDebugLine] = useState(true) // デバッグライン表示
   const sectionRef = useRef<HTMLDivElement>(null)
   const timersRef = useRef<NodeJS.Timeout[]>([])
   const hasTriggeredRef = useRef(false)
@@ -59,18 +58,6 @@ export default function MangaSection() {
 
   return (
     <SpaceSectionWrapper className="pt-8 pb-0">
-      {/* デバッグ用：判定ライン（画面上部40%の位置） */}
-      {showDebugLine && (
-        <div
-          className="fixed top-[40%] left-0 w-full h-[2px] bg-red-500 z-[9999] pointer-events-none"
-          style={{ boxShadow: '0 0 10px red' }}
-        >
-          <span className="absolute left-2 top-[-20px] text-red-500 text-xs bg-black px-2 py-1">
-            判定ライン (40%)
-          </span>
-        </div>
-      )}
-
       <div className="relative w-full text-responsive-xs">
         {/* 漫画画像コンテナ - 画像の実際のアスペクト比に合わせる (1640:1800) */}
         <div ref={sectionRef} className="relative w-full aspect-[1640/1800]">

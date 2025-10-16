@@ -25,7 +25,7 @@ const generateStarPositions = (count: number, seed: number, pageHeight: number) 
     const frac5 = random5 - Math.floor(random5);
 
     positions.push({
-      left: Math.round(frac1 * 768), // 最大幅768px内
+      left: Math.round(frac1 * 430), // 最大幅430px内（max-w-mobile）
       top: Math.round(frac2 * pageHeight), // ページ全体の高さ
       delay: Math.round(frac3 * 4000) / 1000, // 0-4秒のディレイ
       duration: Math.round((1 + frac4 * 2.5) * 1000) / 1000, // 1-3.5秒
@@ -113,8 +113,8 @@ export default function GlobalSpaceBackground() {
     <>
       {/* fixed positionで画面全体に固定 */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* 固定幅（768px）内のみに背景を制限 */}
-        <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-mobile h-screen overflow-visible">
+        {/* 固定幅（430px）内のみに背景を制限、はみ出しは非表示 */}
+        <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-mobile h-screen overflow-hidden">
           {/* ベース背景色 */}
           <div className="absolute inset-0 bg-[#13161b]" />
 
