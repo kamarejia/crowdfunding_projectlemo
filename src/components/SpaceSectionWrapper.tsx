@@ -19,7 +19,7 @@ export default function SpaceSectionWrapper({
   return (
     <section className={`relative overflow-hidden`}>
       {/* paddingを含むラッパー */}
-      <div className={className}>
+      <div className={`relative ${className}`}>
         {/* スマホ最大幅コンテナ */}
         <div className={`relative max-w-mobile mx-auto ${containerClassName}`}>
           {children}

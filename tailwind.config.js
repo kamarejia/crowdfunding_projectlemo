@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '375px',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -20,9 +23,12 @@ module.exports = {
       fontFamily: {
         orbitron: ['var(--font-orbitron)', 'monospace'],
         'mplus1': ['var(--font-m-plus-1)', 'sans-serif'],
+        righteous: ['var(--font-righteous)', 'sans-serif'],
+        kaisotai: ['var(--font-kaisotai)', 'sans-serif'],
+        'senobi-gothic': ['var(--font-senobi-gothic)', 'sans-serif'],
       },
       maxWidth: {
-        'mobile': '768px',
+        'mobile': '430px',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -44,5 +50,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/container-queries'),
+  ],
 }

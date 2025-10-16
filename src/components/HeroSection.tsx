@@ -1,99 +1,297 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
-import { PROJECT_INFO, CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
+import { useState, useEffect, useRef } from 'react'
+import CurtainBlock from './CurtainBlock'
+
+/**
+ * HeroSection - スクロール連動カーテンアニメーション
+ *
+ * 構造:
+ * - 背景（hero_back）: 常に表示（z-0）
+ * - 宇宙船+CTA: 常に表示（z-10）
+ * - 離れていても & ファンディング: 幕が上がるとフェードイン（z-20）
+ * - 幕（CurtainBlock）: スクロールで上昇（z-50, fixed）
+ *
+ * フェーズ:
+ * 1. 'idle': 初期状態、幕が画面を覆っている
+ * 2. 'rising': 幕が上昇中（virtualScrollで制御）
+ * 3. 'lifted': 幕が完全に上昇、コンテンツフェードイン
+ * 4. 'complete': アニメーション完了、通常スクロールへ
+ */
+
+type AnimationPhase = 'idle' | 'rising' | 'lifted' | 'complete'
 
 export default function HeroSection() {
-  const [daysUntil, setDaysUntil] = useState<number | null>(null)
+  const [phase, setPhase] = useState<AnimationPhase>('idle')
+  const [virtualScroll, setVirtualScroll] = useState(0)
+  const [badgeVisible, setBadgeVisible] = useState(false)
+  const ctaRef = useRef<HTMLDivElement>(null)
 
+  // 定数
+  const SCROLL_THRESHOLD = 600 // 幕が上がりきる閾値
+
+  // CTAバッジ用IntersectionObserver（アニメーション完了後のみ）
   useEffect(() => {
-    setDaysUntil(getDaysUntilCrowdfunding())
-  }, [])
+    if (phase !== 'complete') return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => setBadgeVisible(true), 200)
+          }
+        })
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px -60% 0px'
+      }
+    )
+
+    if (ctaRef.current) {
+      observer.observe(ctaRef.current)
+    }
+
+    return () => {
+      if (ctaRef.current) {
+        observer.unobserve(ctaRef.current)
+      }
+    }
+  }, [phase])
+
+  // スクロールロック＆仮想スクロール制御
+  useEffect(() => {
+    if (phase === 'complete') return
+
+    // ページスクロールをロック
+    const originalOverflow = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
+
+    let touchStartY = 0
+
+    const handleWheel = (e: WheelEvent) => {
+      if (phase === 'idle') {
+        e.preventDefault()
+        setPhase('rising')
+        setVirtualScroll(Math.max(0, Math.min(e.deltaY, SCROLL_THRESHOLD)))
+      } else if (phase === 'rising') {
+        e.preventDefault()
+        setVirtualScroll((prev) => {
+          const next = prev + e.deltaY
+          return Math.max(0, Math.min(next, SCROLL_THRESHOLD))
+        })
+      } else {
+        // lifted中はスクロールを完全に無効化
+        e.preventDefault()
+      }
+    }
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touchY = e.touches[0].clientY
+      const deltaY = touchStartY - touchY
+      touchStartY = touchY
+
+      if (phase === 'idle') {
+        e.preventDefault()
+        setPhase('rising')
+        setVirtualScroll(Math.max(0, Math.min(deltaY * 2, SCROLL_THRESHOLD)))
+      } else if (phase === 'rising') {
+        e.preventDefault()
+        setVirtualScroll((prev) => {
+          const next = prev + deltaY * 2
+          return Math.max(0, Math.min(next, SCROLL_THRESHOLD))
+        })
+      } else {
+        e.preventDefault()
+      }
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('touchstart', handleTouchStart, { passive: false })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
+
+    return () => {
+      document.documentElement.style.overflow = originalOverflow
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
+    }
+  }, [phase, SCROLL_THRESHOLD])
+
+  // 仮想スクロール量に応じた段階遷移
+  useEffect(() => {
+    if (phase === 'rising' && virtualScroll >= SCROLL_THRESHOLD) {
+      // 幕が上がりきった
+      setPhase('lifted')
+
+      // フェードインアニメーション完了後（1s delay + 1.2s animation）
+      setTimeout(() => {
+        setPhase('complete')
+        window.scrollTo(0, 0)
+      }, 2400)
+    }
+  }, [phase, virtualScroll, SCROLL_THRESHOLD])
+
+  // コンテンツの表示制御
+  const contentVisible = phase === 'lifted' || phase === 'complete'
+
+  // 幕の進行度に応じたオーバーレイの透明度（0〜0.25）
+  const overlayOpacity = phase === 'idle'
+    ? 0.25
+    : phase === 'rising'
+      ? Math.max(0, 0.25 - (virtualScroll / SCROLL_THRESHOLD) * 0.25)
+      : 0
+
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      {/* メインコンテンツコンテナ (スマホ中心、PC中央配置) */}
-      <div className="relative max-w-mobile mx-auto min-h-screen flex flex-col">
+    <section className="relative w-full bg-black overflow-visible z-10">
+      <div className="relative w-full max-w-mobile mx-auto">
 
-        {/* セーフエリア - 半透明化 */}
-        <div className="h-[59px] bg-lemo-dark-secondary/70 backdrop-blur-[0.5px]" />
-
-        {/* ヘッダーロゴ */}
-        <div className="absolute top-[26px] left-[18px] z-20">
-          <a
-            href="https://spacian.jp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
-          >
-            <Image
-              src="/assets/logos/spacian_logo_square.svg"
-              alt="Spacianロゴ"
-              width={27}
-              height={27}
-              className="object-contain"
-              priority
-            />
-            <span className="font-orbitron font-medium text-lemo-primary text-[18px] leading-none">
-              Spacian
-            </span>
-          </a>
-        </div>
-
-        {/* キービジュアル */}
-        <div className="relative h-[335px] mt-[47px] overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-lemo-dark/20 z-10" />
+        {/* === 背景レイヤー (z-0) - 常に表示 === */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full pointer-events-none z-0">
           <Image
-            src="/assets/images/キービジュアル切り抜き.png"
-            alt="Project LEMO キービジュアル"
-            fill
-            className="object-cover object-[20%_center]"
+            src="/assets/3_hero/hero_back.png"
+            alt=""
+            width={1640}
+            height={4463}
+            className="w-full h-auto"
             priority
           />
         </div>
 
-        {/* プロジェクト情報 */}
-        <div className="flex-1 flex flex-col justify-center px-6 pb-[102px] bg-gradient-to-b from-transparent via-black/15 to-black/25 backdrop-blur-[0.5px]">
+        {/* === コンテンツブロック === */}
 
-          {/* タイトルグループ - 右寄せ */}
-          <div className="text-right mb-[40px]">
-            {/* カテゴリ */}
-            <div className="text-[#FF23D0] text-[15px] font-mplus1 font-medium mb-[8px]">
-              {PROJECT_INFO.description}
+        {/* 離れていてもブロック (z-20) - フェードイン */}
+        <div
+          className="relative w-full pt-[min(11.63vw,50px)] z-20"
+          style={{
+            animation: contentVisible ? 'fadeInSlow 1.2s ease-out forwards' : 'none',
+            opacity: contentVisible ? 1 : 0,
+            willChange: 'opacity'
+          }}
+        >
+          <div className="relative pl-[min(6.74vw,29px)]">
+            {/* テキストブロック */}
+            <div className="relative font-senobi-gothic font-bold text-white text-[min(5.35vw,23px)] leading-[min(8.6vw,37px)]">
+              <p>はなれていても</p>
+              <p>ひとりでも</p>
+              <p>世界のいろいろな</p>
+              <p>
+                <span className="text-[#f461d3] text-[min(6.28vw,27px)] tracking-[-0.075em]">ボードゲーム</span>
+                <span>が</span>
+              </p>
+              <p>オンラインで遊べる</p>
+
+              {/* くたれもキャラクター - テキストブロック基準の絶対配置 */}
+              <div className="absolute left-[min(41.86vw,180px)] top-[min(-2.79vw,-12px)] w-[min(47.44vw,204px)] h-[min(45.35vw,195px)]">
+                <Image
+                  src="/assets/3_hero/くたれも.png"
+                  alt=""
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
-
-            {/* メインタイトル */}
-            <h1 className="text-[#FF23D0] text-[36px] font-orbitron font-bold leading-[0.9] mb-[4px]">
-              {PROJECT_INFO.title}
-            </h1>
-
-            {/* サブタイトル */}
-            <div className="text-[#FF23D0] text-[18px] font-mplus1 font-medium leading-[1.1]">
-              {PROJECT_INFO.subtitle}
-            </div>
-          </div>
-
-          {/* クラウドファンディング情報 */}
-          <div className="text-center mb-[40px]">
-            <div className="text-white text-[18px] font-orbitron leading-[34px] whitespace-pre-line">
-              {`Date:${CROWDFUNDING_INFO.startDate}\nPlace:${CROWDFUNDING_INFO.platform}`}
-            </div>
-          </div>
-
-          {/* CTAボタン - 目立つデザイン */}
-          <div className="flex justify-center">
-            <button className="relative w-full max-w-[312px] h-[62px] bg-[#FF23D0] text-white text-[20px] font-orbitron font-normal hover:bg-lemo-secondary transition-all duration-300 flex items-center justify-center leading-[34px] border-2 border-[#FF23D0] hover:border-white group overflow-hidden">
-              {/* 光るエフェクト */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <span className="relative z-10">
-                {daysUntil !== null && daysUntil > 0
-                  ? `クラファンまで${daysUntil}日`
-                  : CROWDFUNDING_INFO.ctaText}
-              </span>
-            </button>
           </div>
         </div>
+
+        {/* ファンディングスタートブロック (z-20) - フェードイン */}
+        <div
+          className="relative w-full pt-[min(20vw,86px)] z-20"
+          style={{
+            animation: contentVisible ? 'fadeInSlow 1.2s ease-out 1s forwards' : 'none',
+            opacity: contentVisible ? 1 : 0,
+            willChange: 'opacity'
+          }}
+        >
+          <div className="font-kaisotai text-white text-center leading-[min(6.74vw,29px)]">
+            <p className="text-[min(3.02vw,13px)]">クラファンプラットフォーム</p>
+            <p className="text-[min(9.3vw,40px)] tracking-[0.07em] mt-[min(6.74vw,29px)]">CAMPFIRE</p>
+            <p className="text-[min(5.81vw,25px)] tracking-[0.13em] mt-[min(10.23vw,44px)]">2025/11/23</p>
+            <p className="text-[min(9.3vw,40px)] tracking-[0.13em] mt-[min(9.3vw,40px)]">Founding Start</p>
+          </div>
+        </div>
+
+        {/* 宇宙船ブロック (z-50) - 常に表示、オーバーレイより上 */}
+        <div className="relative w-full h-[min(65.81vw,283px)] z-50 mt-[min(20vw,86px)]">
+          <Image
+            src="/assets/3_hero/宇宙船.png"
+            alt=""
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* CTAブロック (z-50) - 常に表示、オーバーレイより上 */}
+        <div className="relative w-full pt-[min(6.98vw,30px)] pb-[min(14.93vw,64px)] flex justify-center z-50">
+          <div ref={ctaRef} className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container">
+
+            {/* 早期特典あり！バッジ */}
+            <div
+              className="absolute left-0 top-0 z-10"
+              style={{
+                animation: badgeVisible ? 'dropInBounceCTA1 0.8s ease-out forwards' : 'none',
+                opacity: badgeVisible ? 1 : 0
+              }}
+            >
+              <div>
+                <p className="font-kaisotai text-[min(7.46vw,32px)] text-white whitespace-nowrap drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                  早期特典あり！
+                </p>
+              </div>
+            </div>
+
+            {/* ボタン背景（SVG） */}
+            <div className="relative w-full aspect-[280/110.356]">
+              <Image
+                src="/assets/3_hero/cta1.svg"
+                alt=""
+                fill
+                className="object-contain"
+              />
+
+              {/* いますぐ支援する + 矢印 */}
+              <div className="absolute inset-0 flex items-center justify-center gap-[3%] translate-y-[10%]">
+                <p className="font-kaisotai text-[min(8.21vw,35px)] text-white whitespace-nowrap">
+                  いますぐ支援する
+                </p>
+                <div className="relative @[400px]:w-[30px] @[300px]:w-[26px] @[200px]:w-[23px] w-[20px] aspect-[23/16]">
+                  <Image
+                    src="/assets/3_hero/矢印.svg"
+                    alt=""
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 下部スペース */}
+        <div className="h-[min(14.93vw,64px)]" />
+
       </div>
+
+      {/* === 暗めのオーバーレイ (z-40) - 幕が上がるにつれて消える === */}
+      {phase !== 'complete' && (
+        <div
+          className="fixed inset-0 bg-black pointer-events-none z-40"
+          style={{
+            opacity: overlayOpacity,
+            willChange: 'opacity'
+          }}
+        />
+      )}
+
+      {/* === 幕ブロック (z-50, fixed) - スクロールで上昇 === */}
+      {phase !== 'complete' && (
+        <CurtainBlock translateY={virtualScroll} />
+      )}
     </section>
   )
 }

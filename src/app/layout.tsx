@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Inter, Orbitron, M_PLUS_1 } from 'next/font/google'
+import { Inter, Orbitron, M_PLUS_1, Righteous } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -11,6 +12,46 @@ const mPlus1 = M_PLUS_1({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700', '800', '900'],
   variable: '--font-m-plus-1'
+})
+const righteous = Righteous({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-righteous'
+})
+
+// ローカルフォント設定（Kaisotai、Senobi Gothic）
+const kaisotai = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Kaisotai-Next-UP-B.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-kaisotai',
+  display: 'swap',
+})
+
+const senobiGothic = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Senobi-Gothic-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/Senobi-Gothic-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/Senobi-Gothic-Medium.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-senobi-gothic',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -25,7 +66,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} ${orbitron.variable} ${mPlus1.variable}`}>{children}</body>
+      <body className={`${inter.className} ${orbitron.variable} ${mPlus1.variable} ${righteous.variable} ${kaisotai.variable} ${senobiGothic.variable}`}>
+        <div className="max-w-mobile mx-auto">
+          {children}
+        </div>
+      </body>
     </html>
   )
 }

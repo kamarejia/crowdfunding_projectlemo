@@ -23,7 +23,7 @@ npm run lint
 
 ## プロジェクト概要
 
-このプロジェクトは**Next.js 14**を使用した日本語対応のランディングページです。App Router（src/app）を採用し、TypeScript + Tailwind CSSで構築されています。現在は「準備中（Coming Soon）」ページとして機能しています。
+このプロジェクトは**Next.js 14**を使用した日本語対応のランディングページです。App Router（src/app）を採用し、TypeScript + Tailwind CSSで構築されています。宇宙をテーマにしたボードゲーム「Project LEMO」のクラウドファンディングキャンペーン用LPです。
 
 ## アーキテクチャ
 
@@ -39,15 +39,19 @@ npm run lint
 src/
 ├── app/
 │   ├── globals.css      # Tailwindとカスタムスタイル
-│   ├── layout.tsx       # ルートレイアウト（日本語設定）
-│   └── page.tsx         # メインページ（HeroSection + WarningSection）
+│   ├── layout.tsx       # ルートレイアウト（日本語設定、フォント読み込み）
+│   └── page.tsx         # メインページ（全セクション統合、背景装飾配置）
 ├── components/
-│   ├── HeroSection.tsx     # ヒーローセクション（キービジュアル・プロジェクト情報）
-│   ├── WarningSection.tsx  # 警告セクション（レモ星人特徴紹介）
-│   ├── SpaceBackground.tsx # 宇宙背景コンポーネント
-│   └── TestSpace.tsx       # テスト用コンポーネント
+│   ├── GlobalSpaceBackground.tsx  # ページ全体の宇宙背景
+│   ├── HeroSection.tsx            # ヒーローセクション（キービジュアル）
+│   ├── MangaSection.tsx           # マンガセクション
+│   ├── LemoSection.tsx            # レモ星人紹介セクション
+│   ├── SystemSection.tsx          # ゲームシステム説明セクション
+│   ├── InteriorSection.tsx        # インテリアセクション
+│   ├── FoundingSection.tsx        # クラウドファンディングセクション
+│   └── SpaceSectionWrapper.tsx    # セクション用宇宙背景ラッパー
 ├── lib/
-│   └── constants.ts     # プロジェクト定数（色、テキスト、設定）
+│   └── constants.ts     # プロジェクト定数（色、テキスト、設定、日数計算関数）
 └── types/
     └── index.ts         # TypeScript型定義
 ```
@@ -55,25 +59,45 @@ src/
 ## 重要な設定
 
 - **Tailwind設定**: `src/pages/**`, `src/components/**`, `src/app/**` パス対応
+  - カスタムカラー: `lemo.*` (primary, secondary, dark, dark-secondary)
+  - カスタム最大幅: `max-w-mobile` (430px)
+  - カスタムスクリーン: `xs` (375px)
+  - カスタムアニメーション: `scroll-right`, `scroll-left` (20s linear infinite)
+  - Container Queries Plugin: コンテナベースのレスポンシブデザイン対応
 - **Next.js設定**: デフォルト設定（カスタマイズなし）
 - **言語**: 日本語UIとメタデータ
 - **スタイル**: グラデーション背景、ダークモード対応CSS変数
-- **最大幅**: `max-w-mobile` (768px) - スマホ向けLPのため、全てのセクションで要素は最大幅768pxまでに制限
+- **最大幅**: `max-w-mobile` (430px) - スマホ向けLPのため、全てのセクションで要素は最大幅430pxまでに制限
 
 ## プロジェクト詳細
 
 **Project LEMO**は、宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリのクラウドファンディングランディングページです。
 
-### 主要機能
-- ヒーローセクション（キービジュアル・プロジェクト情報）
-- 警告セクション（レモ星人の特徴紹介）
-- ニュースセクション（世界観演出）
+### ページ構成（上から順に）
+1. **HeroSection**: キービジュアル・プロジェクト情報・開始日カウントダウン
+2. **MangaSection**: マンガ形式のストーリー紹介
+3. **LemoSection**: レモ星人の紹介セクション
+4. **SystemSection**: ゲームシステムの説明（3つのゲームモード等）
+5. **InteriorSection**: 宇宙船インテリア紹介
+6. **FoundingSection**: クラウドファンディング情報・CTA
+
+注: セクション間には装飾用の惑星画像（青い星、サイコロの惑星）が配置されており、これらは`page.tsx`で直接管理されています。
 
 ### アセット管理
-- 画像: `public/assets/images/`
-- アイコン: `public/assets/icons/`
-- ロゴ: `public/assets/logos/`
-- 詳細は `public/assets/README.md` を参照
+
+アセットは`public/assets/`配下に番号付きディレクトリで整理されています：
+
+- `1_general/`: 汎用アセット
+- `2_background/`: 背景画像（惑星、星等）
+- `3_hero/`: ヒーローセクション用画像
+- `4_manga/`: マンガセクション用画像
+- `5_lemo/`: レモ星人紹介用画像
+- `6_system/`: システムセクション用画像
+- `7_interior/`: インテリアセクション用画像
+- `8_founding/`: ファウンディングセクション用画像
+- `fonts/`: カスタムフォントファイル
+
+詳細は `public/assets/README.md` を参照してください。
 
 ### カラーパレット
 - プライマリ: `#ff23d0` (ピンク・マゼンタ)
@@ -87,14 +111,15 @@ src/
 - **定数管理**: `src/lib/constants.ts` で色、テキスト、設定を一元管理
 - **型安全性**: `src/types/index.ts` でプロジェクト固有の型を定義
 - **Next.js Image**: 画像最適化のため Next.js Image コンポーネントを使用
-- **レイアウト統一**: 全セクションで `max-w-mobile mx-auto` を使用し、コンテンツを中央配置かつ最大幅768pxに制限
+- **レイアウト統一**: 全セクションで `max-w-mobile mx-auto` を使用し、コンテンツを中央配置かつ最大幅430pxに制限
 
 ## フォントとタイポグラフィ
 
 - **Orbitron**: 英語見出し、SF感演出
-- **DotGothic16**: 日本語ゲーム風テキスト（警告セクション）
-- **M PLUS 1**: 日本語本文、UI
-- **Lora**: ロゴ、アクセント
+- **M PLUS 1** (`mplus1`): 日本語本文、UI
+- **Righteous** (`righteous`): 英語見出し、アクセント
+- **Kaisotai** (`kaisotai`): 日本語見出し、個性的な表現
+- **Senobi Gothic** (`senobi-gothic`): 日本語見出し、ゲーム風テキスト
 
 ## 開発時の注意点
 

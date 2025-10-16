@@ -37,3 +37,141 @@ body {
     transform: scale(1.2);
   }
 }
+
+/* ゲームアイコンふわふわアニメーション */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 上から弾んで落ちるアニメーション */
+@keyframes bounceDown {
+  0% {
+    transform: translateY(-100px) rotate(-4.912deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(10px) rotate(-4.912deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-5px) rotate(-4.912deg);
+  }
+  85% {
+    transform: translateY(3px) rotate(-4.912deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-4.912deg);
+  }
+}
+
+/* 下から出現するアニメーション */
+@keyframes slideUpFade {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 左からスライドイン */
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ジョジョにフェードイン */
+@keyframes fadeInSlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 上からガッと出現 - CTA1用（Y: -10%） */
+@keyframes dropInBounceCTA1 {
+  0% {
+    transform: translateX(-25%) translateY(-200px) rotate(346.624deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-25%) translateY(calc(-10% + 10px)) rotate(346.624deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(-25%) translateY(calc(-10% - 5px)) rotate(346.624deg);
+  }
+  100% {
+    transform: translateX(-25%) translateY(-10%) rotate(346.624deg);
+    opacity: 1;
+  }
+}
+
+/* 上からガッと出現 - CTA2用（Y: -25%） */
+@keyframes dropInBounceCTA2 {
+  0% {
+    transform: translateX(-25%) translateY(-200px) rotate(346.624deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-25%) translateY(calc(-25% + 10px)) rotate(346.624deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(-25%) translateY(calc(-25% - 5px)) rotate(346.624deg);
+  }
+  100% {
+    transform: translateX(-25%) translateY(-25%) rotate(346.624deg);
+    opacity: 1;
+  }
+}
+
+/* ドン！と出現するアニメーション */
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ふんわりフェードイン */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
