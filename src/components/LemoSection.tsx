@@ -143,7 +143,7 @@ export default function LemoSection() {
                   </h1>
                 </div>
                 <p className="font-senobi-gothic font-medium text-[#e4027e] text-[min(3.73vw,16px)] leading-[normal] mt-2 whitespace-pre-line">
-                  その見た目からNYASAの{'\n'}学者がLEMOと命名。
+                  その見た目から{'\n'}NYASAの学者が{'\n'}LEMOと命名。
                 </p>
               </div>
 

@@ -30,6 +30,8 @@ export default function HeroSection() {
 
   // 定数
   const SCROLL_THRESHOLD = 600 // 幕が上がりきる閾値
+  const AUTO_RISE_TRIGGER = 100 // 自動上昇のトリガー閾値
+  const AUTO_RISE_DURATION = 600 // 自動上昇のアニメーション時間(ms)
 
   // CTAバッジ用IntersectionObserver（アニメーション完了後のみ）
   useEffect(() => {
@@ -71,19 +73,15 @@ export default function HeroSection() {
     let touchStartY = 0
 
     const handleWheel = (e: WheelEvent) => {
-      if (phase === 'idle') {
-        e.preventDefault()
+      e.preventDefault()
+
+      if (phase === 'idle' && Math.abs(e.deltaY) >= AUTO_RISE_TRIGGER) {
+        // 閾値以上のスクロールで自動上昇開始
         setPhase('rising')
-        setVirtualScroll(Math.max(0, Math.min(e.deltaY, SCROLL_THRESHOLD)))
+        setVirtualScroll(AUTO_RISE_TRIGGER)
       } else if (phase === 'rising') {
-        e.preventDefault()
-        setVirtualScroll((prev) => {
-          const next = prev + e.deltaY
-          return Math.max(0, Math.min(next, SCROLL_THRESHOLD))
-        })
-      } else {
-        // lifted中はスクロールを完全に無効化
-        e.preventDefault()
+        // rising中はスクロールを無効化（自動アニメーション中）
+        return
       }
     }
 
@@ -92,22 +90,18 @@ export default function HeroSection() {
     }
 
     const handleTouchMove = (e: TouchEvent) => {
-      const touchY = e.touches[0].clientY
-      const deltaY = touchStartY - touchY
-      touchStartY = touchY
+      e.preventDefault()
 
-      if (phase === 'idle') {
-        e.preventDefault()
+      const touchY = e.touches[0].clientY
+      const deltaY = Math.abs(touchStartY - touchY)
+
+      if (phase === 'idle' && deltaY >= AUTO_RISE_TRIGGER) {
+        // 閾値以上のスワイプで自動上昇開始
         setPhase('rising')
-        setVirtualScroll(Math.max(0, Math.min(deltaY * 2, SCROLL_THRESHOLD)))
+        setVirtualScroll(AUTO_RISE_TRIGGER)
       } else if (phase === 'rising') {
-        e.preventDefault()
-        setVirtualScroll((prev) => {
-          const next = prev + deltaY * 2
-          return Math.max(0, Math.min(next, SCROLL_THRESHOLD))
-        })
-      } else {
-        e.preventDefault()
+        // rising中はタッチを無効化（自動アニメーション中）
+        return
       }
     }
 
@@ -123,17 +117,44 @@ export default function HeroSection() {
     }
   }, [phase, SCROLL_THRESHOLD])
 
+  // 自動上昇アニメーション
+  useEffect(() => {
+    if (phase === 'rising' && virtualScroll < SCROLL_THRESHOLD) {
+      // 自動で幕を上昇させる
+      const startTime = Date.now()
+      const startScroll = virtualScroll
+      const distance = SCROLL_THRESHOLD - startScroll
+
+      const animate = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / AUTO_RISE_DURATION, 1)
+
+        // easeOutCubic イージング
+        const easeProgress = 1 - Math.pow(1 - progress, 3)
+        const newScroll = startScroll + distance * easeProgress
+
+        setVirtualScroll(newScroll)
+
+        if (progress < 1) {
+          requestAnimationFrame(animate)
+        }
+      }
+
+      requestAnimationFrame(animate)
+    }
+  }, [phase, SCROLL_THRESHOLD, AUTO_RISE_DURATION])
+
   // 仮想スクロール量に応じた段階遷移
   useEffect(() => {
     if (phase === 'rising' && virtualScroll >= SCROLL_THRESHOLD) {
       // 幕が上がりきった
       setPhase('lifted')
 
-      // フェードインアニメーション完了後（1s delay + 1.2s animation）
+      // フェードインアニメーション完了後（0.6s delay + 0.8s animation + 50ms buffer）
       setTimeout(() => {
         setPhase('complete')
         window.scrollTo(0, 0)
-      }, 2400)
+      }, 1450)
     }
   }, [phase, virtualScroll, SCROLL_THRESHOLD])
 
@@ -169,7 +190,7 @@ export default function HeroSection() {
         <div
           className="relative w-full pt-[min(11.63vw,50px)] z-20"
           style={{
-            animation: contentVisible ? 'fadeInSlow 1.2s ease-out forwards' : 'none',
+            animation: contentVisible ? 'fadeInSlow 0.8s ease-out forwards' : 'none',
             opacity: 0,
             willChange: 'opacity'
           }}
@@ -203,7 +224,7 @@ export default function HeroSection() {
         <div
           className="relative w-full pt-[min(20vw,86px)] z-20"
           style={{
-            animation: contentVisible ? 'fadeInSlow 1.2s ease-out 1s forwards' : 'none',
+            animation: contentVisible ? 'fadeInSlow 0.8s ease-out 0.6s forwards' : 'none',
             opacity: 0,
             willChange: 'opacity'
           }}

@@ -104,10 +104,10 @@ export default function InteriorSection() {
 
         {/* タイトルブロック */}
         <div ref={titleRef} className="relative mb-12">
-          {/* Project:LEMOの見どころ + 装飾ライン（ベース構造） */}
+          {/* プロジェクトレモの見どころ + 装飾ライン（ベース構造） */}
           <div>
-            <p className="font-senobi-gothic font-bold text-white text-[min(10.45vw,45px)] tracking-[max(-1.36vw,-6px)] whitespace-nowrap">
-              Project:LEMO
+            <p className="font-senobi-gothic font-bold text-white whitespace-nowrap">
+              <span className="text-[min(9.3vw,40px)] tracking-[max(-2.8vw,-12px)]">プロジェクトレモ</span>
               <span className="text-[min(9.45vw,41px)] tracking-[max(-1.23vw,-5px)] ml-1">の見どころ</span>
             </p>
 

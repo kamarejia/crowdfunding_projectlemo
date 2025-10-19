@@ -143,10 +143,10 @@ export default function SystemSection() {
 
         {/* タイトルブロック */}
         <div ref={titleRef} className="relative mb-12">
-          {/* Project:LEMOをのぞく + 装飾ライン（ベース構造） */}
+          {/* プロジェクトレモをのぞく + 装飾ライン（ベース構造） */}
           <div>
-            <p className="font-senobi-gothic font-bold text-white text-[min(10.45vw,45px)] tracking-[max(-1.36vw,-6px)] whitespace-nowrap">
-              Project:LEMO
+            <p className="font-senobi-gothic font-bold text-white text-[min(10.45vw,45px)] tracking-[max(-2.8vw,-12px)] whitespace-nowrap">
+              プロジェクトレモ
               <span className="text-[min(9.45vw,41px)] tracking-[max(-1.23vw,-5px)] ml-1">をのぞく</span>
             </p>
 
