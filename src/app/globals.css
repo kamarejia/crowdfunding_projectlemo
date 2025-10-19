@@ -52,7 +52,7 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* 上から弾んで落ちるアニメーション */
+/* 上から弾んで落ちるアニメーション（左回転） */
 @keyframes bounceDown {
   0% {
     transform: translateY(-100px) rotate(-4.912deg);
@@ -70,6 +70,27 @@ body {
   }
   100% {
     transform: translateY(0) rotate(-4.912deg);
+  }
+}
+
+/* 上から弾んで落ちるアニメーション（右回転） */
+@keyframes bounceDownRight {
+  0% {
+    transform: translateY(-100px) rotate(4.257deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(10px) rotate(4.257deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-5px) rotate(4.257deg);
+  }
+  85% {
+    transform: translateY(3px) rotate(4.257deg);
+  }
+  100% {
+    transform: translateY(0) rotate(4.257deg);
   }
 }
 

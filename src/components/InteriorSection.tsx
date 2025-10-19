@@ -122,12 +122,11 @@ export default function InteriorSection() {
             </div>
           </div>
 
-          {/* ゲームだけじゃない！ - 絶対配置、回転、右詰め、バウンスアニメーション */}
+          {/* ゲームだけじゃない！ - 絶対配置、回転（右捻り）、右詰め、バウンスアニメーション */}
           <div
-            className="absolute top-[-44px] right-0"
+            className="absolute top-[max(-10.23vw,-44px)] right-0"
             style={{
-              transform: 'rotate(4.257deg)',
-              animation: gameTextVisible ? 'bounceDown 1.2s ease-out forwards' : 'none',
+              animation: gameTextVisible ? 'bounceDownRight 1.2s ease-out forwards' : 'none',
               opacity: gameTextVisible ? 1 : 0
             }}
           >

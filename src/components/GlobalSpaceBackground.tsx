@@ -116,7 +116,7 @@ export default function GlobalSpaceBackground() {
         {/* 固定幅（430px）内のみに背景を制限、はみ出しは非表示 */}
         <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-mobile h-screen overflow-hidden">
           {/* ベース背景色 */}
-          <div className="absolute inset-0 bg-[#13161b]" />
+          <div className="absolute inset-0 bg-[#000000]" />
 
           {/* 星々のコンテナ - ページ全体の高さ */}
           <div

@@ -170,7 +170,7 @@ export default function HeroSection() {
           className="relative w-full pt-[min(11.63vw,50px)] z-20"
           style={{
             animation: contentVisible ? 'fadeInSlow 1.2s ease-out forwards' : 'none',
-            opacity: contentVisible ? 1 : 0,
+            opacity: 0,
             willChange: 'opacity'
           }}
         >
@@ -204,15 +204,19 @@ export default function HeroSection() {
           className="relative w-full pt-[min(20vw,86px)] z-20"
           style={{
             animation: contentVisible ? 'fadeInSlow 1.2s ease-out 1s forwards' : 'none',
-            opacity: contentVisible ? 1 : 0,
+            opacity: 0,
             willChange: 'opacity'
           }}
         >
-          <div className="font-kaisotai text-white text-center leading-[min(6.74vw,29px)]">
-            <p className="text-[min(3.02vw,13px)]">クラファンプラットフォーム</p>
-            <p className="text-[min(9.3vw,40px)] tracking-[0.07em] mt-[min(6.74vw,29px)]">CAMPFIRE</p>
-            <p className="text-[min(5.81vw,25px)] tracking-[0.13em] mt-[min(10.23vw,44px)]">2025/11/23</p>
-            <p className="text-[min(9.3vw,40px)] tracking-[0.13em] mt-[min(9.3vw,40px)]">Founding Start</p>
+          {/* キャンプファイアースタート画像 - 画面幅100% */}
+          <div className="relative w-full">
+            <Image
+              src="/assets/3_hero/キャンプファイアースタート.png"
+              alt="CAMPFIRE Founding Start"
+              width={430}
+              height={200}
+              className="w-full h-auto"
+            />
           </div>
         </div>
 

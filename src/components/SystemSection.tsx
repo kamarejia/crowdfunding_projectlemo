@@ -161,11 +161,10 @@ export default function SystemSection() {
             </div>
           </div>
 
-          {/* なにができるの？ - 絶対配置、回転、バウンスアニメーション */}
+          {/* なにができるの？ - 絶対配置、回転（左捻り）、バウンスアニメーション */}
           <div
-            className="absolute top-[-34px] left-0"
+            className="absolute top-[max(-7.9vw,-34px)] left-0"
             style={{
-              transform: 'rotate(-4.912deg)',
               animation: bounceVisible ? 'bounceDown 1.2s ease-out forwards' : 'none',
               opacity: bounceVisible ? 1 : 0
             }}
