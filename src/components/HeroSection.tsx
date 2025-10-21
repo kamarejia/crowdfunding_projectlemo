@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import CurtainBlock from './CurtainBlock'
+import { CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
 
 /**
  * HeroSection - スクロール連動カーテンアニメーション
@@ -23,15 +24,33 @@ import CurtainBlock from './CurtainBlock'
 type AnimationPhase = 'idle' | 'rising' | 'lifted' | 'complete'
 
 export default function HeroSection() {
-  const [phase, setPhase] = useState<AnimationPhase>('idle')
-  const [virtualScroll, setVirtualScroll] = useState(0)
-  const [badgeVisible, setBadgeVisible] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
 
   // 定数
   const SCROLL_THRESHOLD = 600 // 幕が上がりきる閾値
   const AUTO_RISE_TRIGGER = 100 // 自動上昇のトリガー閾値
   const AUTO_RISE_DURATION = 600 // 自動上昇のアニメーション時間(ms)
+
+  const [phase, setPhase] = useState<AnimationPhase>('idle')
+  const [virtualScroll, setVirtualScroll] = useState(0)
+  const [badgeVisible, setBadgeVisible] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // クラファン開始前かどうかを判定
+  const daysUntilCrowdfunding = getDaysUntilCrowdfunding()
+  const isBeforeCrowdfunding = daysUntilCrowdfunding > 0
+
+  // マウント時にスクロール位置を確認して初期状態を決定
+  useEffect(() => {
+    setMounted(true)
+
+    // スクロール位置が600px以上なら幕をスキップ
+    if (window.scrollY > 600) {
+      setPhase('complete')
+      setVirtualScroll(SCROLL_THRESHOLD)
+    }
+  }, [])
 
   // CTAバッジ用IntersectionObserver（アニメーション完了後のみ）
   useEffect(() => {
@@ -169,7 +188,7 @@ export default function HeroSection() {
       : 0
 
   return (
-    <section className="relative w-full bg-black overflow-visible z-10">
+    <section ref={sectionRef} className="relative w-full bg-black overflow-visible z-10">
       <div className="relative w-full max-w-mobile mx-auto">
 
         {/* === 背景レイヤー (z-0) - 常に表示 === */}
@@ -253,7 +272,13 @@ export default function HeroSection() {
 
         {/* CTAブロック (z-50) - 常に表示、オーバーレイより上 */}
         <div className="relative w-full pt-[min(6.98vw,30px)] pb-[min(14.93vw,64px)] flex justify-center z-50">
-          <div ref={ctaRef} className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container">
+          <a
+            ref={ctaRef}
+            href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
+          >
 
             {/* 早期特典あり！バッジ */}
             <div
@@ -279,10 +304,10 @@ export default function HeroSection() {
                 className="object-contain"
               />
 
-              {/* いますぐ支援する + 矢印 */}
+              {/* CTAテキスト + 矢印（クラファン前後で切り替え） */}
               <div className="absolute inset-0 flex items-center justify-center gap-[3%] translate-y-[10%]">
                 <p className="font-kaisotai text-[min(8.21vw,35px)] text-white whitespace-nowrap">
-                  いますぐ支援する
+                  {isBeforeCrowdfunding ? '最新情報を受け取る' : 'いますぐ支援する'}
                 </p>
                 <div className="relative @[400px]:w-[30px] @[300px]:w-[26px] @[200px]:w-[23px] w-[20px] aspect-[23/16]">
                   <Image
@@ -294,7 +319,7 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
 
         {/* 下部スペース */}
@@ -313,9 +338,11 @@ export default function HeroSection() {
         />
       )}
 
-      {/* === 幕ブロック (z-50, fixed) - スクロールで上昇 === */}
+      {/* === 幕ブロック (z-60, fixed) - スクロールで上昇 === */}
       {phase !== 'complete' && (
-        <CurtainBlock translateY={virtualScroll} />
+        <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.05s' }}>
+          <CurtainBlock translateY={virtualScroll} />
+        </div>
       )}
     </section>
   )

@@ -3,12 +3,17 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import SpaceSectionWrapper from './SpaceSectionWrapper'
+import { CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
 
 export default function FoundingSection() {
   const [badgeVisible, setBadgeVisible] = useState(false)
   const [titleVisible, setTitleVisible] = useState(false)
   const ctaRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
+
+  // クラファン開始前かどうかを判定
+  const daysUntilCrowdfunding = getDaysUntilCrowdfunding()
+  const isBeforeCrowdfunding = daysUntilCrowdfunding > 0
 
   // ページ最下部検知用のスクロールリスナー
   useEffect(() => {
@@ -148,7 +153,13 @@ export default function FoundingSection() {
 
         {/* CTAボタン（HeroSectionのスタイルを参考） */}
         <div className="flex justify-center">
-          <div ref={ctaRef} className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container">
+          <a
+            ref={ctaRef}
+            href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
+          >
 
             {/* 早期特典あり！バッジ - CTA1よりさらに上 */}
             <div
@@ -174,10 +185,10 @@ export default function FoundingSection() {
                 className="object-contain"
               />
 
-              {/* いますぐ支援する + 矢印 - 中央配置 */}
+              {/* CTAテキスト + 矢印（クラファン前後で切り替え） */}
               <div className="absolute inset-0 flex items-center justify-center gap-[3%]">
                 <p className="font-kaisotai text-[min(8.21vw,35px)] text-white whitespace-nowrap">
-                  いますぐ支援する
+                  {isBeforeCrowdfunding ? '最新情報を受け取る' : 'いますぐ支援する'}
                 </p>
                 <div className="relative @[400px]:w-[30px] @[300px]:w-[26px] @[200px]:w-[23px] w-[20px] aspect-[23/16]">
                   <Image
@@ -189,7 +200,7 @@ export default function FoundingSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
 
       </div>

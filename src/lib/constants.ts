@@ -8,10 +8,11 @@ export const PROJECT_INFO = {
 } as const
 
 export const CROWDFUNDING_INFO = {
-  startDate: '2025/10/23~',
-  startDateForCalculation: '2025-10-23', // 日数計算用
+  startDate: '2025/11/22~',
+  startDateForCalculation: '2025-11-22', // 日数計算用
   platform: 'Campfire',
-  ctaText: 'クラウドファンディングスタート'
+  ctaText: 'クラウドファンディングスタート',
+  lineUrl: 'https://lin.ee/fZ4tc18'
 } as const
 
 /**

@@ -56,7 +56,29 @@ const senobiGothic = localFont({
 
 export const metadata: Metadata = {
   title: 'Project LEMO | プロジェクトレモ - クラウドファンディング',
-  description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリのクラウドファンディングプロジェクト',
+  description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリ。世界中のボードゲームがオンラインで遊べる！2025年11月22日クラウドファンディング開始。',
+  openGraph: {
+    title: 'Project LEMO | プロジェクトレモ',
+    description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリ。世界中のボードゲームがオンラインで遊べる！',
+    url: 'https://project-lemo-crowdfunding.vercel.app/',
+    siteName: 'Project LEMO',
+    images: [
+      {
+        url: '/assets/1_general/ogp-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Project LEMO - 宇宙からやってきたレモ星人とボードゲームを楽しもう'
+      }
+    ],
+    locale: 'ja_JP',
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Project LEMO | プロジェクトレモ',
+    description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリ。世界中のボードゲームがオンラインで遊べる！',
+    images: ['/assets/1_general/ogp-image.png']
+  }
 }
 
 export default function RootLayout({
