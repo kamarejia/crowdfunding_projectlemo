@@ -25,7 +25,7 @@ type AnimationPhase = 'idle' | 'rising' | 'lifted' | 'complete'
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const ctaRef = useRef<HTMLDivElement>(null)
+  const ctaRef = useRef<HTMLAnchorElement>(null)
 
   // 定数
   const SCROLL_THRESHOLD = 600 // 幕が上がりきる閾値

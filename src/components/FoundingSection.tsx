@@ -8,7 +8,7 @@ import { CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
 export default function FoundingSection() {
   const [badgeVisible, setBadgeVisible] = useState(false)
   const [titleVisible, setTitleVisible] = useState(false)
-  const ctaRef = useRef<HTMLDivElement>(null)
+  const ctaRef = useRef<HTMLAnchorElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
 
   // クラファン開始前かどうかを判定
