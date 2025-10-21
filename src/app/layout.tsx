@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     siteName: 'Project LEMO',
     images: [
       {
-        url: '/assets/1_general/ogp-image.png',
+        url: '/assets/1_general/ogp-image-compressed.jpg',
         width: 1200,
         height: 630,
         alt: 'Project LEMO - 宇宙からやってきたレモ星人とボードゲームを楽しもう'
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Project LEMO | プロジェクトレモ',
     description: '宇宙からやってきたレモ星人をテーマにしたスマホ向けボードゲームアプリ。世界中のボードゲームがオンラインで遊べる！',
-    images: ['/assets/1_general/ogp-image.png']
+    images: ['/assets/1_general/ogp-image-compressed.jpg']
   }
 }
 
