@@ -6,6 +6,7 @@ import LemoSection from '@/components/LemoSection'
 import SystemSection from '@/components/SystemSection'
 import InteriorSection from '@/components/InteriorSection'
 import FoundingSection from '@/components/FoundingSection'
+import ScrollTracker from '@/components/ScrollTracker'
 
 export default function Home() {
   return (
@@ -13,11 +14,20 @@ export default function Home() {
       {/* ページ全体で統一された宇宙背景 */}
       <GlobalSpaceBackground />
 
+      {/* スクロール深度トラッカー */}
+      <ScrollTracker />
+
       {/* メインコンテンツ */}
       <main className="relative z-10 overflow-hidden">
-        <HeroSection />
-        <MangaSection />
-        <LemoSection />
+        <div data-section="hero">
+          <HeroSection />
+        </div>
+        <div data-section="manga">
+          <MangaSection />
+        </div>
+        <div data-section="lemo">
+          <LemoSection />
+        </div>
 
         {/* 青い星 - LemoとSystemセクション間 */}
         <div className="relative w-full h-0 pointer-events-none">
@@ -31,8 +41,12 @@ export default function Home() {
           </div>
         </div>
 
-        <SystemSection />
-        <InteriorSection />
+        <div data-section="system">
+          <SystemSection />
+        </div>
+        <div data-section="interior">
+          <InteriorSection />
+        </div>
 
         {/* サイコロの惑星 - InteriorとFoundingセクション間 */}
         <div className="relative w-full h-0 pointer-events-none">
@@ -46,7 +60,9 @@ export default function Home() {
           </div>
         </div>
 
-        <FoundingSection />
+        <div data-section="founding">
+          <FoundingSection />
+        </div>
       </main>
     </>
   )

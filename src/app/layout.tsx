@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Orbitron, M_PLUS_1, Righteous } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ['latin'] })
 const orbitron = Orbitron({
@@ -93,6 +94,9 @@ export default function RootLayout({
           {children}
         </div>
       </body>
+      {process.env.NEXT_PUBLIC_GA_ID && (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+      )}
     </html>
   )
 }

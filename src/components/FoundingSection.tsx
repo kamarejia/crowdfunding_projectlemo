@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import SpaceSectionWrapper from './SpaceSectionWrapper'
 import { CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
+import { sendGAEvent } from '@next/third-parties/google'
 
 export default function FoundingSection() {
   const [badgeVisible, setBadgeVisible] = useState(false)
@@ -158,6 +159,7 @@ export default function FoundingSection() {
             href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => sendGAEvent('event', 'line_register_click', { value: 'founding_section' })}
             className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
           >
 

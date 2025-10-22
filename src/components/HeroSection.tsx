@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import CurtainBlock from './CurtainBlock'
 import { CROWDFUNDING_INFO, getDaysUntilCrowdfunding } from '@/lib/constants'
+import { sendGAEvent } from '@next/third-parties/google'
 
 /**
  * HeroSection - スクロール連動カーテンアニメーション
@@ -277,6 +278,7 @@ export default function HeroSection() {
             href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => sendGAEvent('event', 'line_register_click', { value: 'hero_section' })}
             className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
           >
 
