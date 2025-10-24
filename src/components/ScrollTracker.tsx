@@ -29,7 +29,7 @@ export default function ScrollTracker() {
             if (entry.isIntersecting && !trackedSections.current.has(section.id)) {
               // まだ計測していないセクションが表示されたらイベント送信
               sendGAEvent('event', 'scroll_depth', {
-                value: section.name
+                section_name: section.name
               })
               trackedSections.current.add(section.id)
             }

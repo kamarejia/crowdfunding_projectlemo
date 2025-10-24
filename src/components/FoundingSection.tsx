@@ -159,7 +159,7 @@ export default function FoundingSection() {
             href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => sendGAEvent('event', 'line_register_click', { value: 'founding_section' })}
+            onClick={() => sendGAEvent('event', 'line_register_click', { button_location: 'founding_section' })}
             className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
           >
 

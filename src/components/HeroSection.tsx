@@ -278,7 +278,7 @@ export default function HeroSection() {
             href={isBeforeCrowdfunding ? CROWDFUNDING_INFO.lineUrl : '#'}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => sendGAEvent('event', 'line_register_click', { value: 'hero_section' })}
+            onClick={() => sendGAEvent('event', 'line_register_click', { button_location: 'hero_section' })}
             className="relative w-[70%] max-w-[538px] cursor-pointer hover:scale-105 transition-transform duration-300 @container"
           >
 
