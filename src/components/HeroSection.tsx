@@ -46,12 +46,33 @@ export default function HeroSection() {
   useEffect(() => {
     setMounted(true)
 
-    // スクロール位置が600px以上なら幕をスキップ
-    if (window.scrollY > 600) {
-      setPhase('complete')
-      setVirtualScroll(SCROLL_THRESHOLD)
+    // スクロール位置の判定を遅延させて、ブラウザのスクロール復元を待つ
+    const checkScrollPosition = () => {
+      if (window.scrollY > 600) {
+        setPhase('complete')
+        setVirtualScroll(SCROLL_THRESHOLD)
+      }
     }
-  }, [])
+
+    // requestAnimationFrame + setTimeout で確実にスクロール復元を待つ
+    requestAnimationFrame(() => {
+      setTimeout(checkScrollPosition, 100)
+    })
+
+    // 追加の安全装置: スクロールイベントでも監視
+    const handleScrollCheck = () => {
+      if (window.scrollY > 600 && phase !== 'complete') {
+        setPhase('complete')
+        setVirtualScroll(SCROLL_THRESHOLD)
+      }
+    }
+
+    window.addEventListener('scroll', handleScrollCheck, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollCheck)
+    }
+  }, [phase])
 
   // CTAバッジ用IntersectionObserver（アニメーション完了後のみ）
   useEffect(() => {
@@ -342,7 +363,14 @@ export default function HeroSection() {
 
       {/* === 幕ブロック (z-60, fixed) - スクロールで上昇 === */}
       {phase !== 'complete' && (
-        <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.05s' }}>
+        <div
+          style={{
+            opacity: mounted ? 1 : 0,
+            transition: 'opacity 0.05s',
+            // スクロール位置が600px以上の場合は非表示（二重防御）
+            display: typeof window !== 'undefined' && window.scrollY > 600 ? 'none' : 'block'
+          }}
+        >
           <CurtainBlock translateY={virtualScroll} />
         </div>
       )}
