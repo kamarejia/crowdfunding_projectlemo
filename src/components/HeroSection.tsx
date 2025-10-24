@@ -46,11 +46,16 @@ export default function HeroSection() {
   useEffect(() => {
     setMounted(true)
 
-    // スクロール位置が600px以上なら幕をスキップ
-    if (window.scrollY > 600) {
-      setPhase('complete')
-      setVirtualScroll(SCROLL_THRESHOLD)
-    }
+    // スクロール復元を待つ（スマホブラウザ対応）
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // スクロール位置が600px以上なら幕をスキップ
+        if (window.scrollY > 600) {
+          setPhase('complete')
+          setVirtualScroll(SCROLL_THRESHOLD)
+        }
+      })
+    })
   }, [])
 
   // CTAバッジ用IntersectionObserver（アニメーション完了後のみ）
