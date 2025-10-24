@@ -37,6 +37,7 @@ export default function HeroSection() {
   const [virtualScroll, setVirtualScroll] = useState(0)
   const [badgeVisible, setBadgeVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [scrollCheckComplete, setScrollCheckComplete] = useState(false)
 
   // クラファン開始前かどうかを判定
   const daysUntilCrowdfunding = getDaysUntilCrowdfunding()
@@ -52,6 +53,8 @@ export default function HeroSection() {
         setPhase('complete')
         setVirtualScroll(SCROLL_THRESHOLD)
       }
+      // 判定完了をマーク（幕の表示制御用）
+      setScrollCheckComplete(true)
     }
 
     // requestAnimationFrame + setTimeout で確実にスクロール復元を待つ
@@ -365,7 +368,8 @@ export default function HeroSection() {
       {phase !== 'complete' && (
         <div
           style={{
-            opacity: mounted ? 1 : 0,
+            // スクロールチェック完了後のみ表示（フラッシュ防止）
+            opacity: mounted && scrollCheckComplete ? 1 : 0,
             transition: 'opacity 0.05s',
             // スクロール位置が600px以上の場合は非表示（二重防御）
             display: typeof window !== 'undefined' && window.scrollY > 600 ? 'none' : 'block'
